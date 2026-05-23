@@ -8,18 +8,18 @@
 </head>
 
 <?php
-// Nom du fichier JSON
+
 $fichier = "colis.json";
 
-// Si le fichier n'existe pas, on le crée avec un tableau vide
+
 if (!file_exists($fichier)) {
     file_put_contents($fichier, json_encode([]));
 }
 
-// Lire le fichier JSON et mettre le contenu dans le tableau $tabColis
+
 $tabColis = json_decode(file_get_contents($fichier), true);
 
-// Ajout d'un colis
+
 if (isset($_POST['btnAjouter'])) {
     $numero     = $_POST['numero_suivi'];
     $client     = $_POST['client'];
@@ -27,7 +27,7 @@ if (isset($_POST['btnAjouter'])) {
     $description = $_POST['description'];
     $statut     = $_POST['statut'];
 
-    // Créer un tableau associatif pour le nouveau colis
+   
     $nouveauColis = [
         "numero_suivi" => $numero,
         "client"       => $client,
@@ -36,30 +36,30 @@ if (isset($_POST['btnAjouter'])) {
         "statut"       => $statut
     ];
 
-    // Ajouter le nouveau colis dans le tableau
+ 
     $tabColis[] = $nouveauColis;
 
-    // Reconvertir le tableau en JSON et réécrire dans le fichier
+ 
     file_put_contents($fichier, json_encode($tabColis, JSON_PRETTY_PRINT));
 
-    // Rafraîchir la page
+  
     header("Location: colis.php");
     exit;
 }
 
-// Recherche par numéro de suivi ou téléphone
+
 $recherche = $_GET['recherche'] ?? "";
 
 if ($recherche != "") {
     $tabFiltres = [];
     foreach ($tabColis as $colis) {
-        // Vérifier si le numéro de suivi ou le téléphone contient la recherche
+      
         if (str_contains($colis['numero_suivi'], $recherche) || str_contains($colis['telephone'], $recherche)) {
             $tabFiltres[] = $colis;
         }
     }
 } else {
-    // Pas de recherche : afficher tous les colis
+
     $tabFiltres = $tabColis;
 }
 ?>
